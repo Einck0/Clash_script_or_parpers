@@ -1,5 +1,4 @@
-// Clash Verge 的 预处理脚本
-// Define the `main` function
+// // Define the `main` function
 
 // Define the `main` function
 
@@ -68,7 +67,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies: AmericaProxies
@@ -80,7 +79,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies: HongKongProxies
@@ -92,7 +91,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies: TaiwanProxies
@@ -104,7 +103,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies:JapanProxies
@@ -116,7 +115,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies: SingaporeProxies
@@ -142,7 +141,7 @@ function main(params) {
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
     interval: 120,
-    tolerance: 50,
+    tolerance: 30,
     timeout: 1000,
     lazy: true,
     proxies: allProxies
@@ -172,19 +171,25 @@ function main(params) {
   const groups = params["proxy-groups"] = [];
   // 规则
   const rules = [
-    //其他
+    //个人
     "PROCESS-NAME,leigod.exe,DIRECT",
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
     // "DOMAIN-SUFFIX,google.com,选择节点",
     "DOMAIN-SUFFIX,bing.com,选择节点",
+    "DOMAIN-SUFFIX,kakuyomu.jp,负载均衡",
     "DOMAIN-SUFFIX,x.com,选择节点",
     "DOMAIN,clash.razord.top,DIRECT",
     "DOMAIN-SUFFIX,qq.com,DIRECT",
     "DOMAIN-SUFFIX,zhihu.com,DIRECT",
     "DOMAIN,yacd.haishan.me,DIRECT",
-    "GEOIP,CN,DIRECT",
+    // "GEOIP,CN,DIRECT",
     "DOMAIN,www.wenku8.net,选择节点",
     "DOMAIN,www.iflow.work,选择节点",
+    "DOMAIN,share.acgnx.se,香港",
+    "DOMAIN,mikanani.me,香港",
+    "DOMAIN-SUFFIX,bilibili.tv,新加坡",
+    //特殊
+    "PROCESS-NAME,qbittorrent.exe,DIRECT",
     //AI
     "DOMAIN-SUFFIX,openai.com,AI", 
     "DOMAIN-SUFFIX,chat.openai.com,AI", 
@@ -194,7 +199,35 @@ function main(params) {
     "DOMAIN-SUFFIX,sydney.bing.com,AI",
     "DOMAIN-SUFFIX,anthropic.com,AI",
     "DOMAIN-SUFFIX,claude.ai,AI",
+    "DOMAIN,generativelanguage.googleapis.com,AI",
     // 爬虫
+    // GEOSITE
+    "GEOSITE,category-porn,选择节点",
+    "GEOSITE,youtube,选择节点",
+    "GEOSITE,google,选择节点",
+    // "GEOSITE,biliintl,选择节点",
+    "GEOSITE,xbox,选择节点",
+    "GEOSITE,microsoft@cn,DIRECT",
+    "GEOSITE,microsoft,选择节点",
+    "GEOSITE,telegram,选择节点",
+    "GEOSITE,private,DIRECT",
+    "GEOSITE,steam@cn,DIRECT",
+    "GEOSITE,steam,选择节点",
+    "GEOSITE,steamunlocked,选择节点",
+    "GEOSITE,category-game-accelerator-cn,DIRECT",
+    "GEOSITE,epicgames,选择节点",
+    "DOMAIN-SUFFIX,cn,DIRECT",
+    "GEOSITE,geolocation-!cn,选择节点",
+    "GEOSITE,cn,DIRECT",
+    "GEOSITE,github,选择节点",
+    "GEOSITE,abema,选择节点",
+    "GEOSITE,niconico,选择节点",
+    "GEOSITE,dmm,选择节点",
+    "GEOSITE,pixiv,选择节点",
+    "GEOSITE,apple,选择节点",
+    "DOMAIN-SUFFIX,smtp,DIRECT",
+    // "DOMAIN-KEYWORD,aria2,DIRECT",
+
     // "PROCESS-NAME,python,负载均衡",
     // "PROCESS-NAME,python3,负载均衡",
     "PROCESS-NAME,calibre.exe,负载均衡",
@@ -242,32 +275,7 @@ function main(params) {
     // 日本流媒体
     "DOMAIN-SUFFIX,jp,选择节点",
     // "DOMAIN-KEYWORD,asobistage,选择节点",
-    // GEOSITE
-    "GEOSITE,category-porn,选择节点",
-    "GEOSITE,youtube,选择节点",
-    "GEOSITE,google,选择节点",
-    // "GEOSITE,biliintl,选择节点",
-    "GEOSITE,xbox,选择节点",
-    "GEOSITE,microsoft@cn,DIRECT",
-    "GEOSITE,microsoft,选择节点",
-    "GEOSITE,telegram,选择节点",
-    "GEOSITE,private,DIRECT",
-    "GEOSITE,steam@cn,DIRECT",
-    "GEOSITE,steam,选择节点",
-    "GEOSITE,steamunlocked,选择节点",
-    "GEOSITE,category-game-accelerator-cn,DIRECT",
-    "GEOSITE,epicgames,DIRECT",
-    "DOMAIN-SUFFIX,cn,DIRECT",
-    "GEOSITE,geolocation-!cn,选择节点",
-    "GEOSITE,cn,DIRECT",
-    "GEOSITE,github,选择节点",
-    "GEOSITE,abema,选择节点",
-    "GEOSITE,niconico,选择节点",
-    "GEOSITE,dmm,选择节点",
-    "GEOSITE,pixiv,选择节点",
-    "GEOSITE,apple,选择节点",
-    "DOMAIN-SUFFIX,smtp,DIRECT",
-    // "DOMAIN-KEYWORD,aria2,DIRECT",
+
     //begin
     "DOMAIN-SUFFIX,ampproject.org,选择节点",
     "DOMAIN-SUFFIX,appspot.com,选择节点",
