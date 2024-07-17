@@ -168,11 +168,18 @@ function main(params) {
     type: "select",
     proxies: ["DIRECT","自动选择","选择节点","分流"]
   };
+  
+  const mode = {
+    name: "规则外代理模式",
+    type: "select",
+    proxies: ["选择节点","DIRECT"]
+  };
   const groups = params["proxy-groups"] = [];
   // 规则
   const rules = [
     //个人
     "PROCESS-NAME,leigod.exe,DIRECT",
+    "DOMAIN-SUFFIX,einck.top,DIRECT",
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
     // "DOMAIN-SUFFIX,google.com,选择节点",
     "DOMAIN-SUFFIX,bing.com,选择节点",
@@ -188,6 +195,7 @@ function main(params) {
     "DOMAIN,share.acgnx.se,香港",
     "DOMAIN,mikanani.me,香港",
     "DOMAIN-SUFFIX,bilibili.tv,新加坡",
+    "DOMAIN-SUFFIX,gamepp.com,DIRECT",
     //特殊
     "PROCESS-NAME,qbittorrent.exe,DIRECT",
     //AI
@@ -1417,11 +1425,11 @@ function main(params) {
     "IP-CIDR,119.28.28.28/32,DIRECT,no-resolve",
     //end
 
-    "MATCH,选择节点"
+    "MATCH,规则外代理模式"
   ];
 
   // 插入分组
-  groups.unshift(Proxy, Other, AI, US, HongKong, Taiwan, Japan, Singapore, Auto, AdBlock,LoadBlance,bug);
+  groups.unshift(mode,Proxy, Other, AI, US, HongKong, Taiwan, Japan, Singapore, Auto, AdBlock,LoadBlance,bug);
   // 插入规则
   params.rules = rules;
 
