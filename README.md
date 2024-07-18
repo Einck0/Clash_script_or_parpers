@@ -11,9 +11,9 @@ Clash Verge 和 Clash For Windows 的预处理脚本
 将Parpers文件复制内容粘贴  
 
 ## Clash Verge Script（新版）  
-![image](https://github.com/user-attachments/assets/e722fffe-0340-4ae5-95d0-e357dc25226e)
+![image](https://github.com/user-attachments/assets/e722fffe-0340-4ae5-95d0-e357dc25226e)  
 订阅界面右键全局拓展脚本    
-![image](https://github.com/user-attachments/assets/650a1e47-0604-4a8c-8f83-3761fa1556fd)
+![image](https://github.com/user-attachments/assets/650a1e47-0604-4a8c-8f83-3761fa1556fd)  
 复制粘贴Script文件内容  
 
 ## Clash Verge Script（旧版）  
