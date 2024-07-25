@@ -27,16 +27,16 @@ const dnsConfig = {
     "+.msftncsi.com",
   ],
   "default-nameserver": ["223.5.5.5", "114.114.114.114", "1.1.1.1", "8.8.8.8"],
+  // "default-nameserver": ["192.168.31.1", "114.114.114.114", "1.1.1.1", "8.8.8.8"],
   nameserver: [...domesticNameservers, ...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers, ...foreignNameservers],
   "nameserver-policy": {
-    "geosite:private,cn,geolocation-cn": domesticNameservers,
     "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers,
+    "geosite:private,geolocation-cn,cn": domesticNameservers,
   },
 };
 
 // Define the `main` function
-
 function main(params) {
   // DNS配置
   params.dns = dnsConfig;
@@ -97,7 +97,7 @@ function main(params) {
     name: "美国",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -109,7 +109,7 @@ function main(params) {
     name: "香港",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -121,7 +121,7 @@ function main(params) {
     name: "台湾",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -133,7 +133,7 @@ function main(params) {
     name: "日本",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -145,7 +145,7 @@ function main(params) {
     name: "新加坡",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -163,7 +163,6 @@ function main(params) {
     name: "选择节点",
     type: "select",
     proxies: ["DIRECT","自动选择","香港","台湾","美国","新加坡","日本","其他"].concat(allProxies)
-    // proxies: ["香港","台湾","美国","新加坡","日本","选择节点"].concat(allProxies)
   };
 
   // 其他
@@ -171,7 +170,7 @@ function main(params) {
     name: "自动选择",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 120,
+    interval: 600,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -208,30 +207,19 @@ function main(params) {
   const groups = params["proxy-groups"] = [];
   // 规则
   const rules = [
-    //常用
-    "DOMAIN-SUFFIX,cn,DIRECT",
 
     //个人
-    "PROCESS-NAME,leigod.exe,DIRECT",
-    // "DOMAIN-SUFFIX,google.com,选择节点",
-    "DOMAIN-SUFFIX,bing.com,选择节点",
     "DOMAIN-SUFFIX,kakuyomu.jp,负载均衡",
     "DOMAIN-SUFFIX,x.com,选择节点",
-    "DOMAIN,clash.razord.top,DIRECT",
-    "DOMAIN-SUFFIX,qq.com,DIRECT",
-    "DOMAIN-SUFFIX,zhihu.com,DIRECT",
-    "DOMAIN,yacd.haishan.me,DIRECT",
-    "DOMAIN-SUFFIX,einck.top,DIRECT",
+    "DOMAIN-SUFFIX,einck.top,日本",
     "DOMAIN-SUFFIX,18comic.vip,香港",
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
-    // "GEOIP,CN,DIRECT",
-    "DOMAIN,www.wenku8.net,选择节点",
-    "DOMAIN,www.iflow.work,选择节点",
     "DOMAIN,share.acgnx.se,香港",
     "DOMAIN,mikanani.me,香港",
     "DOMAIN-SUFFIX,bilibili.tv,新加坡",
     "DOMAIN-SUFFIX,gamepp.com,DIRECT",
-    "DOMAIN-SUFFIX,onedrive.com,选择节点",
+    "DOMAIN-SUFFIX,onedrive.com,日本",
+    "DOMAIN-SUFFIX,sharepoint.com,日本",
     //特殊
     "PROCESS-NAME,qbittorrent.exe,DIRECT",
     //AI
@@ -239,19 +227,31 @@ function main(params) {
     "DOMAIN-SUFFIX,claude.ai,美国",
     "DOMAIN-SUFFIX,openai.com,AI", 
     "DOMAIN-SUFFIX,chat.openai.com,AI", 
-    "DOMAIN-SUFFIX,pay.openai.com,AI",
     "DOMAIN-SUFFIX,oaistatic.com,AI",
     "DOMAIN-SUFFIX,oaiusercontent.com,AI",
     "DOMAIN-SUFFIX,sydney.bing.com,AI",
     "DOMAIN,generativelanguage.googleapis.com,AI",
-    // 爬虫
-    // GEOSITE
-    "GEOSITE,category-bank-cn,DIRECT",
+    "DOMAIN,gemini.google.com,AI",
 
+    //常用
+    "DOMAIN-SUFFIX,cn,DIRECT",
+    "PROCESS-NAME,leigod.exe,DIRECT",
+    "PROCESS-NAME,QQ.exe,DIRECT",
+    "PROCESS-NAME,5EClient.exe,DIRECT",
+    
+    // 常见
+    "DOMAIN-SUFFIX,extension.run,选择节点",
+    "DOMAIN-SUFFIX,immersivetranslate.com,选择节点",
+    "DOMAIN-SUFFIX,smtp,DIRECT",
+
+    // GEOSITE
+    // https://github.com/MetaCubeX/meta-rules-dat/tree/meta/geo/geosite
+    // "GEOIP,CN,DIRECT",
+    "GEOSITE,category-bank-cn,DIRECT",
+    "GEOSITE,bilibili,DIRECT",
     // 屏蔽搜狗 & 360
     "GEOSITE,sogou,DIRECT",
     "GEOSITE,qihoo360,DIRECT",
-
     // "GEOSITE,category-porn,选择节点",
     "GEOSITE,youtube,选择节点",
     "GEOSITE,google,选择节点",
@@ -272,10 +272,11 @@ function main(params) {
     "GEOSITE,dmm,选择节点",
     "GEOSITE,apple,选择节点",
     "GEOSITE,adguard,选择节点",
+    "GEOSITE,netflix,选择节点",
+    "GEOSITE,speedtest,选择节点",
 
-    "DOMAIN-SUFFIX,smtp,DIRECT",
-    // "DOMAIN-KEYWORD,aria2,DIRECT",
 
+    // 负载均衡
     // "PROCESS-NAME,python,负载均衡",
     // "PROCESS-NAME,python3,负载均衡",
     "PROCESS-NAME,calibre.exe,负载均衡",
@@ -298,9 +299,9 @@ function main(params) {
 
 
     "DOMAIN-SUFFIX,rmbgame.net,DIRECT",
-    "DOMAIN-SUFFIX,moegirl.org,选择节点",
+    "DOMAIN-SUFFIX,moegirl.org,日本",
     // 屏蔽国外Quic流量
-    "AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(NOT,((GEOIP,CN))),REJECT",
+    // "AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(NOT,((GEOIP,CN))),REJECT",
     // 屏蔽Adobe许可证服务器
     "DOMAIN-SUFFIX,adobe.io,REJECT",
     "DOMAIN-SUFFIX,adobestats.io,REJECT",
@@ -318,9 +319,16 @@ function main(params) {
     "DOMAIN-SUFFIX,report.gamecenter.qq.com,REJECT",
     // 日本流媒体
     "DOMAIN-SUFFIX,jp,选择节点",
-    // "DOMAIN-KEYWORD,asobistage,选择节点",
 
     //DIRECT
+    // "PROCESS-NAME,leigod.exe,DIRECT",
+    // "PROCESS-NAME,QQ.exe,DIRECT",
+    // "PROCESS-NAME,5EClient.exe,DIRECT",
+
+    "DOMAIN,clash.razord.top,DIRECT",
+    "DOMAIN-SUFFIX,qq.com,DIRECT",
+    "DOMAIN-SUFFIX,zhihu.com,DIRECT",
+    "DOMAIN,yacd.haishan.me,DIRECT",
     "DOMAIN-SUFFIX,local,DIRECT",
     "IP-CIDR,192.168.0.0/16,DIRECT,no-resolve",
     "IP-CIDR,10.0.0.0/8,DIRECT,no-resolve",
@@ -332,6 +340,7 @@ function main(params) {
     "IP-CIDR6,fe80::/10,DIRECT,no-resolve",
     "IP-CIDR6,fd00::/8,DIRECT,no-resolve",
     "DOMAIN,app.adjust.com,DIRECT",
+    "DOMAIN,lz.qaiu.top,DIRECT",
     "DOMAIN-SUFFIX,googletraveladservices.com,DIRECT",
     "DOMAIN,dl.google.com,DIRECT",
     "DOMAIN,mtalk.google.com,DIRECT",
@@ -663,7 +672,9 @@ function main(params) {
     //end
 
 
-    // //begin
+    // 代理
+    "DOMAIN,www.wenku8.net,选择节点",
+    "DOMAIN,www.iflow.work,选择节点",
     "DOMAIN-SUFFIX,ampproject.org,选择节点",
     "DOMAIN-SUFFIX,appspot.com,选择节点",
     "DOMAIN-SUFFIX,blogger.com,选择节点",
@@ -672,8 +683,6 @@ function main(params) {
     "DOMAIN-SUFFIX,gvt1.com,选择节点",
     "DOMAIN-SUFFIX,gvt3.com,选择节点",
     "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,选择节点",
-    // "DOMAIN-KEYWORD,google,选择节点",
-    // "DOMAIN-KEYWORD,blogspot,选择节点",
     "DOMAIN-SUFFIX,onedrive.live.com,选择节点",
     "DOMAIN-SUFFIX,xboxlive.com,选择节点",
     "DOMAIN-SUFFIX,cdninstagram.com,选择节点",
@@ -691,7 +700,6 @@ function main(params) {
     "DOMAIN-SUFFIX,rocksdb.org,选择节点",
     "DOMAIN-SUFFIX,whatsapp.com,选择节点",
     "DOMAIN-SUFFIX,whatsapp.net,选择节点",
-    "DOMAIN-KEYWORD,facebook,选择节点",
     "IP-CIDR,3.123.36.126/32,选择节点,no-resolve",
     "IP-CIDR,35.157.215.84/32,选择节点,no-resolve",
     "IP-CIDR,35.157.217.255/32,选择节点,no-resolve",
@@ -708,12 +716,8 @@ function main(params) {
     "DOMAIN-SUFFIX,twimg.com,选择节点",
     "DOMAIN-SUFFIX,twitpic.com,选择节点",
     "DOMAIN-SUFFIX,vine.co,选择节点",
-    "DOMAIN-KEYWORD,twitter,选择节点",
     "DOMAIN-SUFFIX,t.me,选择节点",
     "DOMAIN-SUFFIX,tdesktop.com,选择节点",
-    "DOMAIN-SUFFIX,telegra.ph,选择节点",
-    "DOMAIN-SUFFIX,telegram.me,选择节点",
-    "DOMAIN-SUFFIX,telegram.org,选择节点",
     "IP-CIDR,91.108.4.0/22,选择节点,no-resolve",
     "IP-CIDR,91.108.8.0/22,选择节点,no-resolve",
     "IP-CIDR,91.108.12.0/22,选择节点,no-resolve",
@@ -803,6 +807,7 @@ function main(params) {
     "DOMAIN-SUFFIX,disconnect.me,选择节点",
     "DOMAIN-SUFFIX,discordapp.com,选择节点",
     "DOMAIN-SUFFIX,discordapp.net,选择节点",
+    "DOMAIN-SUFFIX,fomepay.com,选择节点",
     "DOMAIN-SUFFIX,disqus.com,选择节点",
     "DOMAIN-SUFFIX,dlercloud.com,选择节点",
     "DOMAIN-SUFFIX,dns2go.com,选择节点",
@@ -1080,10 +1085,6 @@ function main(params) {
     "DOMAIN-SUFFIX,zattoo.com,选择节点",
     "DOMAIN,testflight.apple.com,选择节点",
     "DOMAIN-SUFFIX,appsto.re,选择节点",
-    "DOMAIN,books.itunes.apple.com,选择节点",
-    "DOMAIN,hls.itunes.apple.com,选择节点",
-    "DOMAIN,apps.apple.com,选择节点",
-    "DOMAIN,itunes.apple.com,选择节点",
     "DOMAIN,api-glb-sea.smoot.apple.com,选择节点",
     "DOMAIN,lookup-api.apple.com,选择节点",
     "DOMAIN-SUFFIX,abc.xyz,选择节点",
@@ -1127,7 +1128,6 @@ function main(params) {
     "DOMAIN-SUFFIX,webrtc.org,选择节点",
     "DOMAIN-SUFFIX,whatbrowser.org,选择节点",
     "DOMAIN-SUFFIX,widevine.com,选择节点",
-    "DOMAIN-SUFFIX,x.company,选择节点",
     "DOMAIN-SUFFIX,youtu.be,选择节点",
     "DOMAIN-SUFFIX,yt.be,选择节点",
     "DOMAIN-SUFFIX,ytimg.com,选择节点",
@@ -1198,25 +1198,6 @@ function main(params) {
     "DOMAIN-SUFFIX,yimg.com,选择节点",
     "DOMAIN,api.steampowered.com,选择节点",
     "DOMAIN,store.steampowered.com,选择节点",      
-    //苹果
-    "DOMAIN-SUFFIX,aaplimg.com,DIRECT",
-    "DOMAIN-SUFFIX,apple.co,DIRECT",
-    "DOMAIN-SUFFIX,apple.com,DIRECT",
-    "DOMAIN-SUFFIX,apple-cloudkit.com,DIRECT",
-    "DOMAIN-SUFFIX,appstore.com,DIRECT",
-    "DOMAIN-SUFFIX,cdn-apple.com,DIRECT",
-    "DOMAIN-SUFFIX,crashlytics.com,DIRECT",
-    "DOMAIN-SUFFIX,icloud.com,DIRECT",
-    "DOMAIN-SUFFIX,icloud-content.com,DIRECT",
-    "DOMAIN-SUFFIX,me.com,DIRECT",
-    "DOMAIN-SUFFIX,mzstatic.com,DIRECT",
-    "DOMAIN,www-cdn.icloud.com.akadns.net,DIRECT",
-    //telegram
-    "DOMAIN-SUFFIX,t.me,选择节点",
-    "DOMAIN-SUFFIX,tdesktop.com,选择节点",
-    "DOMAIN-SUFFIX,telegra.ph,选择节点",
-    "DOMAIN-SUFFIX,telegram.me,选择节点",
-    "DOMAIN-SUFFIX,telegram.org,选择节点",
     "IP-CIDR,91.108.4.0/22,选择节点,no-resolve",
     "IP-CIDR,91.108.8.0/22,选择节点,no-resolve",
     "IP-CIDR,91.108.12.0/22,选择节点,no-resolve",
@@ -1226,28 +1207,6 @@ function main(params) {
     "IP-CIDR6,2001:b28:f23d::/48,选择节点,no-resolve",
     "IP-CIDR6,2001:b28:f23f::/48,选择节点,no-resolve",
     "IP-CIDR6,2001:67c:4e8::/48,选择节点,no-resolve",
-    //youtube
-    "DOMAIN-SUFFIX,googlevideo.com,选择节点",
-    "DOMAIN-SUFFIX,youtube.com,选择节点",
-    "DOMAIN,youtubei.googleapis.com,选择节点",
-    //netflix
-    "DOMAIN-SUFFIX,netflix.com,选择节点",
-    "DOMAIN-SUFFIX,netflix.net,选择节点",
-    "DOMAIN-SUFFIX,nflxext.com,选择节点",
-    "DOMAIN-SUFFIX,nflximg.com,选择节点",
-    "DOMAIN-SUFFIX,nflximg.net,选择节点",
-    "DOMAIN-SUFFIX,nflxso.net,选择节点",
-    "DOMAIN-SUFFIX,nflxvideo.net,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest0.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest1.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest2.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest3.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest4.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest5.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest6.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest7.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest8.com,选择节点",
-    "DOMAIN-SUFFIX,netflixdnstest9.com,选择节点",
     "IP-CIDR,23.246.0.0/18,选择节点,no-resolve",
     "IP-CIDR,37.77.184.0/21,选择节点,no-resolve",
     "IP-CIDR,45.57.0.0/17,选择节点,no-resolve",
@@ -1303,8 +1262,6 @@ function main(params) {
     "DOMAIN-SUFFIX,scdn.co,选择节点",
     "DOMAIN-SUFFIX,spotify.com,选择节点",
     "DOMAIN-SUFFIX,spoti.fi,选择节点",
-    // "DOMAIN-KEYWORD,spotify.com,选择节点",
-    // "DOMAIN-KEYWORD,-spotify-com,选择节点",
     "DOMAIN-SUFFIX,tidal.com,选择节点",
     "DOMAIN-SUFFIX,c4assets.com,选择节点",
     "DOMAIN-SUFFIX,channel4.com,选择节点",
@@ -1331,12 +1288,9 @@ function main(params) {
     "DOMAIN,gamer2-cds.cdn.hinet.net,选择节点",
     "DOMAIN-SUFFIX,bbc.co.uk,选择节点",
     "DOMAIN-SUFFIX,bbci.co.uk,选择节点",
-    // "DOMAIN-KEYWORD,bbcfmt,选择节点",
-    // "DOMAIN-KEYWORD,uk-live,选择节点",
     "DOMAIN-SUFFIX,dazn.com,选择节点",
     "DOMAIN-SUFFIX,dazn-api.com,选择节点",
     "DOMAIN,d151l6v8er5bdm.cloudfront.net,选择节点",
-    // "DOMAIN-KEYWORD,voddazn,选择节点",
     "DOMAIN-SUFFIX,bamgrid.com,选择节点",
     "DOMAIN-SUFFIX,disney-plus.net,选择节点",
     "DOMAIN-SUFFIX,disneyplus.com,选择节点",
