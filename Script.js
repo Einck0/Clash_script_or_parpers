@@ -270,6 +270,7 @@ function main(params) {
     "GEOSITE,abema,选择节点",
     "GEOSITE,niconico,选择节点",
     "GEOSITE,dmm,选择节点",
+    "GEOSITE,apple-cn,DIRECT",
     "GEOSITE,apple,选择节点",
     "GEOSITE,adguard,选择节点",
     "GEOSITE,netflix,选择节点",
