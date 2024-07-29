@@ -12,33 +12,15 @@ const foreignNameservers = [
 ];
 // DNS配置
 const dnsConfig = {
-  dns: true,
-  listen: 1053,
-  ipv6: true,
-  "use-hosts": true,
-  // "cache-algorithm": "arc",
-  "enhanced-mode": "fake-ip",
-  "fake-ip-range": "198.18.0.1/16",
-  "fake-ip-filter": [
-    "+.lan",
-    "+.local",
-    "+.msftconnecttest.com",
-    "+.msftncsi.com",
-  ],
-  "default-nameserver": ["223.5.5.5", "114.114.114.114"],
-  // "default-nameserver": ["223.5.5.5", "114.114.114.114", "1.1.1.1", "8.8.8.8"],
-  nameserver: [...domesticNameservers, ...foreignNameservers],
-  "proxy-server-nameserver": [...domesticNameservers, ...foreignNameservers],
-  // "nameserver-policy": {
-    // "geosite:google,youtube,telegram,gfw,geolocation-!cn": foreignNameservers,
-    // "geosite:private,geolocation-cn,cn": domesticNameservers,
-  // },
-  "fallback": [
-    "https://doh.dns.sb/dns-query",
-    "https://dns.cloudflare.com/dns-query",
-    "tls://8.8.4.4:853",
-  ],
-  "use-system-hosts": false,
+    "enable": true,
+    "ipv6": false,
+    "default-nameserver": ["223.5.5.5", "119.29.29.29"],
+    "enhanced-mode": "fake-ip",
+    "fake-ip-range": "198.18.0.1/16",
+    "use-hosts": true,
+    "nameserver": ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'],
+    "fallback": ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853'],
+    "fallback-filter": { "geoip": true, "ipcidr": ['240.0.0.0/4', "0.0.0.0/32"] },
 };
 
 // Define the `main` function
@@ -676,6 +658,7 @@ function main(params) {
     "IP-CIDR,119.28.28.28/32,DIRECT,no-resolve",
 
     "GEOSITE,geolocation-cn,DIRECT",
+    "GEOIP,CN,DIRECT",
     //end
 
 
