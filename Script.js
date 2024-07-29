@@ -680,7 +680,6 @@ function main(params) {
 
 
     // 代理
-    "GEOSITE,geolocation!-cn,DIRECT",
     "DOMAIN,www.wenku8.net,选择节点",
     "DOMAIN,www.iflow.work,选择节点",
     "DOMAIN-SUFFIX,ampproject.org,选择节点",
