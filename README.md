@@ -1,4 +1,4 @@
-# Clash_script_or_parpers
+# Clash_script_or_parsers
 Clash Verge 和 Clash For Windows 的预处理脚本  
 由于CFW长期不更新所以已不再使用，parpers也不再更新
 
