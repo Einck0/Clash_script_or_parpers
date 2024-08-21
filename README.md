@@ -7,8 +7,8 @@ Clash Verge 和 Clash For Windows 的预处理脚本
 ![image](https://github.com/Einck0/Clash_script_or_parpers/assets/91471683/53bcc915-d1d9-4f4e-a8a2-ccf8bcd72150)  
 右键订阅  
 ![image](https://github.com/Einck0/Clash_script_or_parpers/assets/91471683/7ff7f4b2-4544-499f-9ff9-7185daecbe36)  
-选择Paraers  
-将Parpers文件复制内容粘贴  
+选择Parsers  
+将Parsers文件复制内容粘贴  
 
 ## Clash Verge Script（新版）  
 ![image](https://github.com/user-attachments/assets/e722fffe-0340-4ae5-95d0-e357dc25226e)  
