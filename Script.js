@@ -1,26 +1,38 @@
 // 国内DNS服务器
 const domesticNameservers = [
-  "https://dns.alidns.com/dns-query", // 阿里云公共DNS
-  "https://doh.360.cn/dns-query", // 360安全DNS
+
+  // "https://dns.ipv4dns.com", // 无广告
+  "https://101.226.4.6", // 移动
+  // "https://doh.360.cn/dns-query", // 360安全DNS
+  "https://1.1.1.1/dns-query", // Cloudflare(主)
 ];
 // 国外DNS服务器
 const foreignNameservers = [
-  "https://1.1.1.1/dns-query", // Cloudflare(主)
+  "https://doh.360.cn/dns-query", // 360安全DNS
+  // "https://1.1.1.1/dns-query", // Cloudflare(主)
   "https://1.0.0.1/dns-query", // Cloudflare(备)
-  "https://208.67.222.222/dns-query", // OpenDNS(主)
-  "https://208.67.220.220/dns-query", // OpenDNS(备)
+  "https://208.67.222.222/dns-query",, // OpenDNS(主)
+  // "https://208.67.220.220/dns-query", // OpenDNS(备)
 ];
+
 // DNS配置
 const dnsConfig = {
     "enable": true,
     "ipv6": false,
-    "default-nameserver": ["223.5.5.5", "119.29.29.29"],
+    "default-nameserver": ["223.5.5.5", "8.8.8.8"],
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
     "use-hosts": true,
-    "nameserver": ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'],
-    "fallback": ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853'],
+
+    "nameserver": domesticNameservers,
+    // "fallback": foreignNameservers,
+
+    // "nameserver": ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'],
+    // "fallback": ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853'],
+
     "fallback-filter": { "geoip": true, "ipcidr": ['240.0.0.0/4', "0.0.0.0/32"] },
+
+    "proxy-server-nameserver":['https://doh.pub/dns-query'],
 };
 
 // Define the `main` function
@@ -84,7 +96,7 @@ function main(params) {
     name: "美国",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -96,7 +108,7 @@ function main(params) {
     name: "香港",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -108,7 +120,7 @@ function main(params) {
     name: "台湾",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -120,7 +132,7 @@ function main(params) {
     name: "日本",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -132,7 +144,7 @@ function main(params) {
     name: "新加坡",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -157,7 +169,7 @@ function main(params) {
     name: "自动选择",
     type: "url-test",
     url: "https://www.gstatic.com/generate_204",
-    interval: 1800,
+    interval: 7200,
     tolerance: 30,
     timeout: 1000,
     lazy: true,
@@ -203,13 +215,16 @@ function main(params) {
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
     "DOMAIN,share.acgnx.se,香港",
     "DOMAIN,mikanani.me,香港",
+    "DOMAIN,yuc.wiki,香港",
     "DOMAIN-SUFFIX,bilibili.tv,新加坡",
     "DOMAIN-SUFFIX,gamepp.com,DIRECT",
-    "DOMAIN-SUFFIX,onedrive.com,日本",
-    "DOMAIN-SUFFIX,sharepoint.com,日本",
+    // "DOMAIN-SUFFIX,onedrive.com,日本",
+    // "DOMAIN-SUFFIX,sharepoint.com,日本",
     //特殊
     "PROCESS-NAME,qbittorrent.exe,DIRECT",
     //AI
+    "DOMAIN,aistudio.google.com,AI",
+    "DOMAIN,ai.google.dev,AI",
     "DOMAIN-SUFFIX,anthropic.com,美国",
     "DOMAIN-SUFFIX,claude.ai,美国",
     "DOMAIN-SUFFIX,openai.com,AI",
@@ -217,12 +232,13 @@ function main(params) {
     "DOMAIN-SUFFIX,oaistatic.com,AI",
     "DOMAIN-SUFFIX,oaiusercontent.com,AI",
     "DOMAIN-SUFFIX,sydney.bing.com,AI",
-    "DOMAIN,generativelanguage.googleapis.com,日本",
+    "DOMAIN,generativelanguage.googleapis.com,AI",
+    "DOMAIN,googleapis.com,AI",
     "DOMAIN,gemini.google.com,AI",
 
     //常用
     "PROCESS-NAME,leigod.exe,DIRECT",
-    "PROCESS-NAME,QQ.exe,DIRECT",
+    // "PROCESS-NAME,QQ.exe,DIRECT",
     "PROCESS-NAME,5EClient.exe,DIRECT",
 
     // 常见
@@ -617,9 +633,6 @@ function main(params) {
     "DOMAIN-SUFFIX,mubu.com,DIRECT",
     "DOMAIN-SUFFIX,myzaker.com,DIRECT",
     "DOMAIN-SUFFIX,nim-lang-cn.org,DIRECT",
-    "DOMAIN-SUFFIX,nvidia.com,DIRECT",
-    "DOMAIN-SUFFIX,oracle.com,DIRECT",
-    "DOMAIN-SUFFIX,paypal.com,DIRECT",
     "DOMAIN-SUFFIX,paypalobjects.com,DIRECT",
     "DOMAIN-SUFFIX,qdaily.com,DIRECT",
     "DOMAIN-SUFFIX,qidian.com,DIRECT",
@@ -642,7 +655,6 @@ function main(params) {
     "DOMAIN-SUFFIX,tianyancha.com,DIRECT",
     "DOMAIN-SUFFIX,udacity.com,DIRECT",
     "DOMAIN-SUFFIX,uning.com,DIRECT",
-    "DOMAIN-SUFFIX,vmware.com,DIRECT",
     "DOMAIN-SUFFIX,weather.com,DIRECT",
     "DOMAIN-SUFFIX,weico.cc,DIRECT",
     "DOMAIN-SUFFIX,weidian.com,DIRECT",
@@ -666,6 +678,8 @@ function main(params) {
     "DOMAIN,www.wenku8.net,选择节点",
     "DOMAIN,www.iflow.work,选择节点",
     "DOMAIN-SUFFIX,ampproject.org,选择节点",
+    "DOMAIN-SUFFIX,ohmygpt.com,选择节点",
+    "DOMAIN-SUFFIX,together.ai,选择节点",
     "DOMAIN-SUFFIX,appspot.com,选择节点",
     "DOMAIN-SUFFIX,blogger.com,选择节点",
     "DOMAIN-SUFFIX,getoutline.org,选择节点",
