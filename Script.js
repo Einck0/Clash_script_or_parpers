@@ -2,9 +2,11 @@
 const domesticNameservers = [
 
   // "https://dns.ipv4dns.com", // 无广告
-  "https://101.226.4.6", // 移动
+  // "https://101.226.4.6", // 移动
   // "https://doh.360.cn/dns-query", // 360安全DNS
   "https://1.1.1.1/dns-query", // Cloudflare(主)
+  // "https://208.67.222.222/dns-query",, // OpenDNS(主)
+  "tls://223.5.5.5:853",
 ];
 // 国外DNS服务器
 const foreignNameservers = [
@@ -25,58 +27,80 @@ const dnsConfig = {
     "use-hosts": true,
 
     "nameserver": domesticNameservers,
-    // "fallback": foreignNameservers,
+    "fallback": foreignNameservers,
 
     // "nameserver": ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'],
     // "fallback": ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853'],
 
     "fallback-filter": { "geoip": true, "ipcidr": ['240.0.0.0/4', "0.0.0.0/32"] },
 
-    "proxy-server-nameserver":['https://doh.pub/dns-query'],
+    "proxy-server-nameserver":['114.114.114.114',"https://1.1.1.1/dns-query",],
+    // "proxy-server-nameserver":['114.114.114.114',],
 };
 
 // Define the `main` function
 function main(params) {
   // DNS配置
-  params.dns = dnsConfig;
+  // params.dns = dnsConfig;
   // 所有地区
   const allRegex = /自动|故障|流量|官网|套餐|机场|订阅/;
   const allProxies = params.proxies
     .filter((e) => !allRegex.test(e.name))
     .map((e) => e.name);
-  // 狮城地区
-  const SingaporeRegex = /新加坡|sg|SG|Singapore|🇸🇬|Singapore|坡/u;
-  const SingaporeProxies = params.proxies
-    .filter((e) => SingaporeRegex.test(e.name))
-    .map((e) => e.name);
-  // 日本地区
-  const JapanRegex = /日本|JP|Japan|🇯🇵|Tokyo|Osaka|霓虹|jp/u;
-  const JapanProxies = params.proxies
-    .filter((e) => JapanRegex.test(e.name))
-    .map((e) => e.name);
-  // 美国地区
-  const AmericaRegex = /美国|US|United States|America|🇺🇸|Los Angeles|San Jose|Phoenix|洛杉矶|🇺🇸|凤凰城|us|UnitedStates/u;
-  const AmericaProxies = params.proxies
-    .filter((e) => AmericaRegex.test(e.name))
-    .map((e) => e.name);
-  // 台湾地区
-  const TaiwanRegex = /台湾|TW|Taiwan|🇹🇼|Taipei|台北/u;
-  const TaiwanProxies = params.proxies
-    .filter((e) => TaiwanRegex.test(e.name))
-    .map((e) => e.name);
 
-  // 香港地区
-  const HongKongRegex = /香港|HK|Hong Kong|🇭🇰/u;
-  const HongKongProxies = params.proxies
-    .filter((e) => HongKongRegex.test(e.name))
-    .map((e) => e.name);
-
-  // 其他地区
-  const OtherRegex = /^(?!.*?(🇸🇬|🇯🇵|🇭🇰|🇺🇸|🇹🇼|HK|Hong|香|US|United|美|TW|Tai|tai|台|JP|apan|日|SG|inga|新)).*$/u;
-  const OtherProxies = params.proxies
-    .filter((e) => OtherRegex.test(e.name))
-    .map((e) => e.name);
-
+  const regions = [
+    {
+      name: "Special",
+      regex: /自动|故障|流量|官网|套餐|机场|订阅|EPL|epl|家宽/,
+    },
+    {
+        name: 'Singapore',
+        regex: /新加坡|sg|SG|Singapore|🇸🇬|Singapore|坡/u
+    },
+    {
+        name: 'Japan',
+        regex: /日本|JP|Japan|🇯🇵|Tokyo|Osaka|霓虹|jp/u
+    },
+    {
+        name: 'United States',
+        regex: /美国|US|United States|America|Los Angeles|San Jose|Phoenix|洛杉矶|🇺🇸|凤凰城|us|UnitedStates/u
+    },
+    {
+        name: 'Taiwan',
+        regex: /台湾|TW|Taiwan|🇹🇼|Taipei|台北/u
+    },
+    {
+        name: 'Hong Kong',
+        regex: /香港|HK|Hong Kong|🇭🇰/u
+    }
+];
+  
+  // 初始代理列表
+  let remainingProxies = params.proxies;
+  
+  // 结果对象
+  const regionProxies = {};
+  
+  // 遍历每个地区
+  for (const region of regions) {
+      // 过滤出匹配的代理
+      const filteredProxies = remainingProxies.filter(e => region.regex.test(e.name));
+      
+      // 将匹配的代理保存到结果对象中
+      regionProxies[region.name] = filteredProxies.map(e => e.name);
+  
+      // 更新剩余代理列表，仅保留未匹配的项
+      remainingProxies = remainingProxies.filter(e => !region.regex.test(e.name));
+  }
+  
+  // 处理其他地区，保留未过滤的项
+  // const OtherRegex = /^(?!.*?(🇸🇬|🇯🇵|🇭🇰|🇺🇸|🇹🇼|HK|Hong|香|US|United|美|TW|Tai|tai|台|JP|apan|日|SG|inga|新)).*$/u;
+  // regionProxies['Other'] = remainingProxies
+  //     .filter(e => OtherRegex.test(e.name))
+  //     .map(e => e.name);
+  const OtherProxies = remainingProxies.map(e => e.name);
+  
+  
 
   // REJECT
   const AdBlock = {
@@ -91,6 +115,13 @@ function main(params) {
   //   proxies: ["DIRECT"]
   // };
 
+  //特殊
+  const Special = {
+    name: "特殊",
+    type: "select",
+    proxies: regionProxies['Special'].concat("REJECT")
+  };
+
   // 美国
   const US = {
     name: "美国",
@@ -100,7 +131,7 @@ function main(params) {
     tolerance: 30,
     timeout: 1000,
     lazy: true,
-    proxies: AmericaProxies
+    proxies: regionProxies['United States'].concat("REJECT")
   };
 
   // 香港
@@ -112,7 +143,7 @@ function main(params) {
     tolerance: 30,
     timeout: 1000,
     lazy: true,
-    proxies: HongKongProxies
+    proxies: regionProxies['Hong Kong'].concat("REJECT")
   };
 
   // 台湾
@@ -124,7 +155,7 @@ function main(params) {
     tolerance: 30,
     timeout: 1000,
     lazy: true,
-    proxies: TaiwanProxies
+    proxies: regionProxies['Taiwan'].concat("REJECT")
   };
 
   // 日本
@@ -136,7 +167,7 @@ function main(params) {
     tolerance: 30,
     timeout: 1000,
     lazy: true,
-    proxies: JapanProxies
+    proxies: regionProxies['Japan'].concat("REJECT")
   };
 
   // 新加坡
@@ -148,23 +179,24 @@ function main(params) {
     tolerance: 30,
     timeout: 1000,
     lazy: true,
-    proxies: SingaporeProxies
+    proxies: regionProxies['Singapore'].concat("REJECT")
   };
 
   // 其他
   const Other = {
     name: "其他",
     type: "select",
-    proxies: OtherProxies
+    proxies: OtherProxies.concat("REJECT")
   };
+
   // 节点选择
   const Proxy = {
     name: "选择节点",
     type: "select",
-    proxies: ["DIRECT", "自动选择", "香港", "台湾", "美国", "新加坡", "日本", "其他"].concat(allProxies)
+    proxies: ["自动选择","DIRECT","特殊",  "香港", "台湾", "美国", "新加坡", "日本", "其他"].concat(allProxies)
   };
 
-  // 其他
+  // 自动选择
   const Auto = {
     name: "自动选择",
     type: "url-test",
@@ -180,7 +212,7 @@ function main(params) {
   const AI = {
     name: "AI",
     type: "select",
-    proxies: ["香港", "台湾", "美国", "新加坡", "日本", "选择节点"]
+    proxies: [ "选择节点","特殊","香港", "台湾", "美国", "新加坡", "日本"]
   };
 
 
@@ -189,13 +221,14 @@ function main(params) {
     name: "分流",
     type: "load-balance",
     lazy: true,
-    proxies: [].concat(HongKongProxies, TaiwanProxies, JapanProxies, SingaporeProxies),
+    proxies: [].concat(regionProxies['United States'], regionProxies['Hong Kong'], regionProxies['Taiwan'], regionProxies['Japan'], regionProxies['Singapore']),
     strategy: "round-robin"
   }
+
   const LoadBlance = {
     name: "负载均衡",
     type: "select",
-    proxies: ["DIRECT", "自动选择", "选择节点", "分流"]
+    proxies: ["选择节点","DIRECT", "自动选择",  "分流"]
   };
 
   const mode = {
@@ -203,9 +236,12 @@ function main(params) {
     type: "select",
     proxies: ["DIRECT","选择节点" ]
   };
+
   const groups = params["proxy-groups"] = [];
   // 规则
   const rules = [
+    // temp
+    "DOMAIN,justauth.wiki,香港",
 
     //个人
     "DOMAIN-SUFFIX,kakuyomu.jp,负载均衡",
@@ -235,6 +271,8 @@ function main(params) {
     "DOMAIN,generativelanguage.googleapis.com,AI",
     "DOMAIN,googleapis.com,AI",
     "DOMAIN,gemini.google.com,AI",
+    "DOMAIN, cfcus02.opapi.win,选择节点",
+    
 
     //常用
     "PROCESS-NAME,leigod.exe,DIRECT",
@@ -325,6 +363,7 @@ function main(params) {
     "DOMAIN-SUFFIX,report.gamecenter.qq.com,REJECT",
     // 日本流媒体
     "DOMAIN-SUFFIX,jp,选择节点",
+    "DOMAIN,scamalytics.com,选择节点",
 
     //DIRECT
     // "PROCESS-NAME,leigod.exe,DIRECT",
@@ -1301,7 +1340,7 @@ function main(params) {
 
   // 插入分组
   // groups.unshift(mode,Proxy, Other, AI, US, HongKong, Taiwan, Japan, Singapore, Auto, AdBlock,LoadBlance,bug);
-  groups.unshift(mode, Proxy, Other, AI, US, HongKong, Taiwan, Japan, Singapore, Auto, LoadBlance, bug);
+  groups.unshift(mode,Special, Proxy, Other, AI, US, HongKong, Taiwan, Japan, Singapore, Auto, LoadBlance, bug);
   // 插入规则
   params.rules = rules;
 
