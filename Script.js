@@ -51,7 +51,7 @@ function main(params) {
   const regions = [
     {
       name: "Special",
-      regex: /自动|故障|流量|官网|套餐|机场|订阅|EPL|epl|家宽/,
+      regex: /自动|故障|流量|官网|套餐|机场|订阅|EPL|epl|家宽|正|客服/,
     },
     {
         name: 'Singapore',
@@ -242,6 +242,24 @@ function main(params) {
   const rules = [
     // temp
     "DOMAIN,justauth.wiki,香港",
+    "DOMAIN,yapi.pro,选择节点",
+
+    //常用
+    "PROCESS-NAME,leigod.exe,DIRECT",
+    // "PROCESS-NAME,QQ.exe,DIRECT",
+    "PROCESS-NAME,5EClient.exe,DIRECT",
+
+    // 常见
+    "DOMAIN-SUFFIX,extension.run,选择节点",
+    "DOMAIN-SUFFIX,immersivetranslate.com,选择节点",
+    "DOMAIN-SUFFIX,smtp,DIRECT",
+    "DOMAIN-SUFFIX,msftconnecttest.com,DIRECT",
+
+
+    //特殊
+    "DOMAIN,share.acgnx.se,香港",
+    "DOMAIN,mikanani.me,香港",
+    "PROCESS-NAME,qbittorrent.exe,DIRECT",
 
     //个人
     "DOMAIN-SUFFIX,kakuyomu.jp,负载均衡",
@@ -249,15 +267,12 @@ function main(params) {
     "DOMAIN-SUFFIX,einck.top,日本",
     "DOMAIN-SUFFIX,18comic.vip,香港",
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
-    "DOMAIN,share.acgnx.se,香港",
-    "DOMAIN,mikanani.me,香港",
     "DOMAIN,yuc.wiki,香港",
     "DOMAIN-SUFFIX,bilibili.tv,新加坡",
     "DOMAIN-SUFFIX,gamepp.com,DIRECT",
     // "DOMAIN-SUFFIX,onedrive.com,日本",
     // "DOMAIN-SUFFIX,sharepoint.com,日本",
-    //特殊
-    "PROCESS-NAME,qbittorrent.exe,DIRECT",
+
     //AI
     "DOMAIN,aistudio.google.com,AI",
     "DOMAIN,ai.google.dev,AI",
@@ -273,16 +288,6 @@ function main(params) {
     "DOMAIN,gemini.google.com,AI",
     "DOMAIN, cfcus02.opapi.win,选择节点",
     
-
-    //常用
-    "PROCESS-NAME,leigod.exe,DIRECT",
-    // "PROCESS-NAME,QQ.exe,DIRECT",
-    "PROCESS-NAME,5EClient.exe,DIRECT",
-
-    // 常见
-    "DOMAIN-SUFFIX,extension.run,选择节点",
-    "DOMAIN-SUFFIX,immersivetranslate.com,选择节点",
-    "DOMAIN-SUFFIX,smtp,DIRECT",
 
     // GEOSITE
     // https://github.com/MetaCubeX/meta-rules-dat/tree/meta/geo/geosite
@@ -301,8 +306,8 @@ function main(params) {
     "GEOSITE,steamunlocked,选择节点",
     "GEOSITE,netflix,选择节点",
     "GEOSITE,speedtest,选择节点",
-    "GEOSITE,facebook,选择节点",
-    // 屏蔽搜狗 & 360
+    // "GEOSITE,facebook,选择节点",
+
     "GEOSITE,sogou,DIRECT",
     "GEOSITE,qihoo360,DIRECT",
     // "GEOSITE,category-porn,选择节点",
@@ -1331,9 +1336,9 @@ function main(params) {
     "DOMAIN-SUFFIX,skyking.com.tw,选择节点",
     "DOMAIN,hamifans.emome.net,选择节点",
 
-    "GEOSITE,geolocation-!cn,选择节点",
+    // "GEOSITE,geolocation-!cn,选择节点",
 
-    // "GEOSITE,cn,DIRECT",
+    "GEOSITE,cn,DIRECT",
 
     "MATCH,规则外代理模式"
   ];
