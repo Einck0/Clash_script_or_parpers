@@ -41,7 +41,7 @@ const dnsConfig = {
 // Define the `main` function
 function main(params) {
   // DNS配置
-  // params.dns = dnsConfig;
+  params.dns = dnsConfig;
   // 所有地区
   const allRegex = /自动|故障|流量|官网|套餐|机场|订阅/;
   const allProxies = params.proxies
