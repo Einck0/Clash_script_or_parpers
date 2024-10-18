@@ -5,16 +5,16 @@ const domesticNameservers = [
   // "https://101.226.4.6", // 移动
   // "https://doh.360.cn/dns-query", // 360安全DNS
   "https://1.1.1.1/dns-query", // Cloudflare(主)
-  // "https://208.67.222.222/dns-query",, // OpenDNS(主)
-  "tls://223.5.5.5:853",
+  "https://208.67.222.222/dns-query",, // OpenDNS(主)
+  // "tls://223.5.5.5:853",
 ];
 // 国外DNS服务器
 const foreignNameservers = [
-  "https://doh.360.cn/dns-query", // 360安全DNS
+  // "https://doh.360.cn/dns-query", // 360安全DNS
   // "https://1.1.1.1/dns-query", // Cloudflare(主)
   "https://1.0.0.1/dns-query", // Cloudflare(备)
-  "https://208.67.222.222/dns-query",, // OpenDNS(主)
-  // "https://208.67.220.220/dns-query", // OpenDNS(备)
+  // "https://208.67.222.222/dns-query",, // OpenDNS(主)
+  "https://208.67.220.220/dns-query", // OpenDNS(备)
 ];
 
 // DNS配置
@@ -246,10 +246,13 @@ function main(params) {
 
     //常用
     "PROCESS-NAME,leigod.exe,DIRECT",
+    "PROCESS-NAME,leishenSdk.exe,DIRECT",
     // "PROCESS-NAME,QQ.exe,DIRECT",
     "PROCESS-NAME,5EClient.exe,DIRECT",
+    "PROCESS-NAME,CS2.exe,DIRECT",
 
     // 常见
+    "DOMAIN-SUFFIX,leigod.com,DIRECT",
     "DOMAIN-SUFFIX,extension.run,选择节点",
     "DOMAIN-SUFFIX,immersivetranslate.com,选择节点",
     "DOMAIN-SUFFIX,smtp,DIRECT",
@@ -279,7 +282,6 @@ function main(params) {
     "DOMAIN-SUFFIX,anthropic.com,美国",
     "DOMAIN-SUFFIX,claude.ai,美国",
     "DOMAIN-SUFFIX,openai.com,AI",
-    "DOMAIN-SUFFIX,chat.openai.com,AI",
     "DOMAIN-SUFFIX,oaistatic.com,AI",
     "DOMAIN-SUFFIX,oaiusercontent.com,AI",
     "DOMAIN-SUFFIX,sydney.bing.com,AI",
@@ -293,8 +295,8 @@ function main(params) {
     // https://github.com/MetaCubeX/meta-rules-dat/tree/meta/geo/geosite
     // "GEOIP,CN,DIRECT",
     "GEOSITE,category-bank-cn,DIRECT",
-    // "GEOSITE,tencent,DIRECT",
-    // "GEOSITE,alibaba,DIRECT",
+    "GEOSITE,tencent,DIRECT",
+    "GEOSITE,alibaba,DIRECT",
     // "GEOSITE,netease,DIRECT",
     "GEOSITE,bilibili,DIRECT",
     "GEOSITE,github,选择节点",
@@ -339,14 +341,14 @@ function main(params) {
     "PROCESS-NAME,baidunetdisk.exe,DIRECT",
     "PROCESS-NAME,baidunetdiskhost.exe,DIRECT",
 
-    //steam
-    "DOMAIN-SUFFIX,store.steampower.com,DIRECT",
-    "DOMAIN-SUFFIX,steamcontent.com,DIRECT",
-    "DOMAIN-SUFFIX,steamstatic.com,选择节点",
-    "DOMAIN-SUFFIX,steamserver.net,DIRECT",
-    // "DOMAIN-SUFFIX,test.steampowered.com,DIRECT",
-    "DOMAIN-SUFFIX,api.steampowered.com,选择节点",
-    // "DOMAIN-SUFFIX,api.steampowered.com,DIRECT",
+    // //steam
+    // "DOMAIN-SUFFIX,store.steampower.com,DIRECT",
+    // "DOMAIN-SUFFIX,steamcontent.com,DIRECT",
+    // "DOMAIN-SUFFIX,steamstatic.com,选择节点",
+    // "DOMAIN-SUFFIX,steamserver.net,DIRECT",
+    // // "DOMAIN-SUFFIX,test.steampowered.com,DIRECT",
+    // "DOMAIN-SUFFIX,api.steampowered.com,选择节点",
+    // // "DOMAIN-SUFFIX,api.steampowered.com,DIRECT",
 
     "DOMAIN-SUFFIX,moegirl.org,日本",
     // 屏蔽国外Quic流量
@@ -370,11 +372,6 @@ function main(params) {
     "DOMAIN-SUFFIX,jp,选择节点",
     "DOMAIN,scamalytics.com,选择节点",
 
-    //DIRECT
-    // "PROCESS-NAME,leigod.exe,DIRECT",
-    // "PROCESS-NAME,QQ.exe,DIRECT",
-    // "PROCESS-NAME,5EClient.exe,DIRECT",
-
     "DOMAIN-SUFFIX,cn,DIRECT",
     "DOMAIN,clash.razord.top,DIRECT",
     "DOMAIN-SUFFIX,qq.com,DIRECT",
@@ -394,8 +391,6 @@ function main(params) {
     "DOMAIN,lz.qaiu.top,DIRECT",
     "DOMAIN-SUFFIX,rmbgame.net,DIRECT",
     "DOMAIN-SUFFIX,googletraveladservices.com,DIRECT",
-    "DOMAIN,livew.l.qq.com,DIRECT",
-    "DOMAIN,vd.l.qq.com,DIRECT",
     "DOMAIN,analytics.strava.com,DIRECT",
     "DOMAIN,msg.umeng.com,DIRECT",
     "DOMAIN,msg.umengcloud.com,DIRECT",
