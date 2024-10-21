@@ -3,40 +3,40 @@ const domesticNameservers = [
 
   // "https://dns.ipv4dns.com", // 无广告
   // "https://101.226.4.6", // 移动
-  // "https://doh.360.cn/dns-query", // 360安全DNS
-  "https://1.1.1.1/dns-query", // Cloudflare(主)
-  "https://208.67.222.222/dns-query",, // OpenDNS(主)
-  // "tls://223.5.5.5:853",
+  "https://doh.360.cn/dns-query", // 360安全DNS
+  "tls://223.5.5.5:853",
 ];
 // 国外DNS服务器
 const foreignNameservers = [
-  // "https://doh.360.cn/dns-query", // 360安全DNS
-  // "https://1.1.1.1/dns-query", // Cloudflare(主)
-  "https://1.0.0.1/dns-query", // Cloudflare(备)
-  // "https://208.67.222.222/dns-query",, // OpenDNS(主)
-  "https://208.67.220.220/dns-query", // OpenDNS(备)
+  "https://1.1.1.1/dns-query", // Cloudflare(主)
+  // "https://1.0.0.1/dns-query", // Cloudflare(备)
+  "https://208.67.222.222/dns-query",, // OpenDNS(主)
+  // "https://208.67.220.220/dns-query", // OpenDNS(备)
 ];
 
 // DNS配置
 const dnsConfig = {
     "enable": true,
-    "ipv6": false,
+    // "ipv6": false,
     "default-nameserver": ["223.5.5.5", "8.8.8.8"],
     "enhanced-mode": "fake-ip",
     "fake-ip-range": "198.18.0.1/16",
     "use-hosts": true,
 
-    "nameserver": domesticNameservers,
-    "fallback": foreignNameservers,
-
-    // "nameserver": ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query'],
-    // "fallback": ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853'],
+    "nameserver": foreignNameservers,
+    "fallback": domesticNameservers,
 
     "fallback-filter": { "geoip": true, "ipcidr": ['240.0.0.0/4', "0.0.0.0/32"] },
-
+    "nameserver-policy": {
+      "geosite:private,geolocation-cn": domesticNameservers,
+      "geosite:geolocation-!cn": foreignNameservers,
+    },
     "proxy-server-nameserver":['114.114.114.114',"https://1.1.1.1/dns-query",],
-    // "proxy-server-nameserver":['114.114.114.114',],
 };
+
+const tunConfig = {
+  
+}
 
 // Define the `main` function
 function main(params) {
@@ -63,7 +63,7 @@ function main(params) {
     },
     {
         name: 'United States',
-        regex: /美国|US|United States|America|Los Angeles|San Jose|Phoenix|洛杉矶|🇺🇸|凤凰城|us|UnitedStates/u
+        regex: /美国|US|United States|America|Los Angeles|San Jose|Phoenix|洛杉矶|🇺🇸|凤凰城|UnitedStates/u
     },
     {
         name: 'Taiwan',
@@ -267,7 +267,7 @@ function main(params) {
     //个人
     "DOMAIN-SUFFIX,kakuyomu.jp,负载均衡",
     "DOMAIN-SUFFIX,x.com,选择节点",
-    "DOMAIN-SUFFIX,einck.top,日本",
+    "DOMAIN-SUFFIX,einck.top,选择节点",
     "DOMAIN-SUFFIX,18comic.vip,香港",
     "DOMAIN-SUFFIX,gamer.com.tw,台湾",
     "DOMAIN,yuc.wiki,香港",
