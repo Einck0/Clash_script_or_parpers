@@ -4,8 +4,6 @@ const domesticNameservers = [
   // "https://dns.ipv4dns.com", // 无广告
   "114.114.114.114",
   "223.5.5.5",
-  "system",
-  "127.0.0.53"
 ];
 // 国外DNS服务器
 const foreignNameservers = [
@@ -55,6 +53,7 @@ const dnsConfig = {
 
 
     "nameserver-policy": { //指定域名查询的解析服务器，可使用 geosite, 优先于 nameserver/fallback 查询
+      "+.tencentyun.com":"127.0.0.53",
       "geosite:private,geolocation-cn": domesticNameservers,
     },
 
@@ -92,13 +91,17 @@ const rules = [
   "PROCESS-NAME,5EClient.exe,DIRECT",
   "PROCESS-NAME,cloudmusic.exe,DIRECT",
 
+  //下载软件
+  "PROCESS-NAME,NeatDM.exe,下载",
+
   // 常见
   "DOMAIN-SUFFIX,leigod.com,DIRECT",
   "DOMAIN-SUFFIX,extension.run,选择节点",
   "DOMAIN-SUFFIX,immersivetranslate.com,选择节点",
   "DOMAIN-SUFFIX,smtp,DIRECT",
   "DOMAIN-SUFFIX,msftconnecttest.com,DIRECT",
-
+  "DOMAIN-SUFFIX,sharepoint.com,DIRECT",
+  "DOMAIN,dlink.host,DIRECT",
 
   //特殊
   "DOMAIN,share.acgnx.se,香港",
@@ -121,23 +124,30 @@ const rules = [
   "DOMAIN-SUFFIX,gamepp.com,DIRECT",
   "DOMAIN-SUFFIX,yamibo.com,DIRECT",
   // "DOMAIN-SUFFIX,onedrive.com,日本",
-  // "DOMAIN-SUFFIX,sharepoint.com,日本",
+
+
 
   //AI
   "DOMAIN,api.afreeapi.me,选择节点",
-  "DOMAIN,aistudio.google.com,AI",
-  "DOMAIN,ai.google.dev,AI",
+
   "DOMAIN-SUFFIX,anthropic.com,美国",
   "DOMAIN-SUFFIX,claude.ai,美国",
   "DOMAIN-SUFFIX,openai.com,AI",
   "DOMAIN-SUFFIX,oaistatic.com,AI",
   "DOMAIN-SUFFIX,oaiusercontent.com,AI",
   "DOMAIN-SUFFIX,sydney.bing.com,AI",
+  "GEOSITE,openai,AI",
+
+  "DOMAIN,cfcus02.opapi.win,选择节点",
+
   "DOMAIN,generativelanguage.googleapis.com,负载均衡",
   "DOMAIN,googleapis.com,AI",
   "DOMAIN,gemini.google.com,AI",
-  "DOMAIN,cfcus02.opapi.win,选择节点",
-  
+  "DOMAIN,aistudio.google.com,AI",
+  "DOMAIN,ai.google.dev,AI",
+  "DOMAIN-SUFFIX,googleapis.com,AI",
+
+  "DOMAIN-SUFFIX,gstatic.com,AI",
   // 屏蔽国外Quic流量
   // "AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(NOT,((GEOIP,CN))),REJECT",
   // 屏蔽Adobe许可证服务器
@@ -172,6 +182,7 @@ const rules = [
   "GEOSITE,telegram,选择节点",
   "GEOSITE,steam@cn,DIRECT",
   "GEOSITE,steam,选择节点",
+  "GEOSITE,paypal,选择节点",
   "GEOSITE,steamunlocked,选择节点",
   "GEOSITE,netflix,选择节点",
   "GEOSITE,speedtest,选择节点",
@@ -526,7 +537,6 @@ const rules = [
   "DOMAIN-SUFFIX,mubu.com,DIRECT",
   "DOMAIN-SUFFIX,myzaker.com,DIRECT",
   "DOMAIN-SUFFIX,nim-lang-cn.org,DIRECT",
-  "DOMAIN-SUFFIX,paypalobjects.com,DIRECT",
   "DOMAIN-SUFFIX,qdaily.com,DIRECT",
   "DOMAIN-SUFFIX,qidian.com,DIRECT",
   "DOMAIN-SUFFIX,qyer.com,DIRECT",
@@ -1285,7 +1295,7 @@ function proxyTrasformer(params){
   const US = {
     name: "美国",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1297,7 +1307,7 @@ function proxyTrasformer(params){
   const HongKong = {
     name: "香港",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1309,7 +1319,7 @@ function proxyTrasformer(params){
   const Taiwan = {
     name: "台湾",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1321,7 +1331,7 @@ function proxyTrasformer(params){
   const Japan = {
     name: "日本",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1333,7 +1343,7 @@ function proxyTrasformer(params){
   const Singapore = {
     name: "新加坡",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1345,21 +1355,21 @@ function proxyTrasformer(params){
   const Other = {
     name: "其他",
     type: "select",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     proxies: OtherProxies.concat("REJECT")
   };
 
   const Low = {
     name: "低延迟",
     type: "select",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     proxies: regionProxies['Low'].concat("REJECT")
   };
   // 节点选择
   const Proxy = {
     name: "选择节点",
     type: "select",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     proxies: ["自动选择","DIRECT","低延迟","香港", "台湾", "美国", "新加坡", "日本","特殊", "其他"].concat(allProxies)
   };
 
@@ -1367,7 +1377,7 @@ function proxyTrasformer(params){
   const Auto = {
     name: "自动选择",
     type: "url-test",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     interval: 7200,
     tolerance: 30,
     timeout: 1000,
@@ -1379,7 +1389,7 @@ function proxyTrasformer(params){
   const AI = {
     name: "AI",
     type: "select",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     proxies: [ "选择节点","特殊","香港", "台湾", "美国", "新加坡", "日本"]
   };
 
@@ -1391,7 +1401,7 @@ function proxyTrasformer(params){
   const pollingJanpan = {
     name: "轮询(日本)",
     type: "load-balance",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     lazy: true,
     proxies: restrictedRegionForCN.map(region => regionProxies[region]).flat(),
     strategy: "round-robin"
@@ -1403,7 +1413,7 @@ function proxyTrasformer(params){
   const pollingSinggapore = {
     name: "轮询(新加坡)",
     type: "load-balance",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     lazy: true,
     proxies: restrictedRegionForCN.map(region => regionProxies[region]).flat(),
     strategy: "round-robin"
@@ -1419,7 +1429,7 @@ function proxyTrasformer(params){
   const restrictedRegionForCNWithHKPolling = {
     name: "轮询(包含香港)",
     type: "load-balance",
-    url: "https://www.gstatic.com/generate_204",
+    url: "http://cp.cloudflare.com/generate_204",
     lazy: true,
     proxies: restrictedRegionForCNWithHK.map(region => regionProxies[region]).flat(),
     strategy: "round-robin"
@@ -1429,6 +1439,12 @@ function proxyTrasformer(params){
     name: "负载均衡",
     type: "select",
     proxies: ["选择节点","DIRECT", "自动选择",  "轮询(日本)","轮询(新加坡)", "轮询(包含香港)"]
+  };
+
+  const DownLoad = {
+    name: "下载",
+    type: "select",
+    proxies: ["PASS","选择节点","DIRECT", "自动选择",  "轮询(日本)","轮询(新加坡)", "轮询(包含香港)"]
   };
 
   const mode = {
@@ -1442,7 +1458,7 @@ function proxyTrasformer(params){
 
   const groups = [];
   // 插入分组
-  groups.unshift(mode,Low, Proxy, Other, AI, Special,LoadBlance, US, HongKong, Taiwan, Japan, Singapore,  pollingJanpan,pollingSinggapore, restrictedRegionForCNWithHKPolling, Auto);
+  groups.unshift(mode,Low, Proxy, DownLoad,AI, Other, Special,LoadBlance, US, HongKong, Taiwan, Japan, Singapore,  pollingJanpan,pollingSinggapore, restrictedRegionForCNWithHKPolling, Auto);
   // 插入规则
   params["proxy-groups"] = groups;
   params["rules"] = rules;
