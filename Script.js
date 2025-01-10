@@ -189,6 +189,7 @@ const rules = [
   // "GEOSITE,facebook,选择节点",
   "GEOSITE,anaconda,选择节点",
   "GEOSITE,cloudflare,选择节点",
+  "GEOSITE,bahamut,台湾",
 
   "GEOSITE,sogou,DIRECT",
   "GEOSITE,qihoo360,DIRECT",
