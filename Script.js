@@ -77,7 +77,17 @@ function trasformer(params){
   return params;
 }
 
+
+
+
+
 const rules = [
+
+  "PROCESS-NAME,LdTermDaemon.exe,REJECT",
+  "PROCESS-NAME,LdTerm.exe,REJECT",
+  "PROCESS-NAME,LdTermPlug.exe,REJECT",
+  "PROCESS-NAME,LdTermPlug64.exe,REJECT",
+
   // temp
   "DOMAIN-SUFFIX,einck.top,DIRECT",
   "DOMAIN-SUFFIX,einck.top,选择节点",
@@ -189,7 +199,6 @@ const rules = [
   // "GEOSITE,facebook,选择节点",
   "GEOSITE,anaconda,选择节点",
   "GEOSITE,cloudflare,选择节点",
-  "GEOSITE,bahamut,台湾",
 
   "GEOSITE,sogou,DIRECT",
   "GEOSITE,qihoo360,DIRECT",
@@ -1206,12 +1215,20 @@ const rules = [
   "MATCH,规则外代理模式"
 ];
 
+
+//代理分组
 function proxyTrasformer(params){
-  // 所有地区
-  const allRegex = /自动|故障|流量|官网|套餐|机场|订阅/;
+params.proxies = params.proxies.concat([
+]);
+
+
+//代理名称过滤
+  const notProxy = /自动|故障|流量|官网|套餐|机场|订阅/;
   const allProxies = params.proxies
-    .filter((e) => !allRegex.test(e.name))
+    .filter((e) => !notProxy.test(e.name))
     .map((e) => e.name);
+
+  params.proxies
 
   const regions = [
     {
@@ -1242,6 +1259,10 @@ function proxyTrasformer(params){
     {
         name: 'Hong Kong',
         regex: /香港|HK|Hong Kong|🇭🇰/u
+    },
+    {
+        name:'Canada',
+        regex: /加拿大|CA|Canada|🇨🇦/u
     }
 ];
   
@@ -1352,6 +1373,18 @@ function proxyTrasformer(params){
     proxies: regionProxies['Singapore'].concat("REJECT")
   };
 
+  // 加拿大
+  const Canada = {
+    name: "加拿大",
+    type: "url-test",
+    url: "http://cp.cloudflare.com/generate_204",
+    interval: 7200,
+    tolerance: 30,
+    timeout: 1000,
+    lazy: true,
+    proxies: regionProxies['Canada'].concat("REJECT")
+  };
+
   // 其他
   const Other = {
     name: "其他",
@@ -1371,7 +1404,7 @@ function proxyTrasformer(params){
     name: "选择节点",
     type: "select",
     url: "http://cp.cloudflare.com/generate_204",
-    proxies: ["自动选择","DIRECT","低延迟","香港", "台湾", "美国", "新加坡", "日本","特殊", "其他"].concat(allProxies)
+    proxies: ["自动选择","DIRECT","低延迟","香港", "台湾", "美国", "新加坡", "日本","加拿大","特殊", "其他"].concat(allProxies)
   };
 
   // 自动选择
@@ -1391,15 +1424,37 @@ function proxyTrasformer(params){
     name: "AI",
     type: "select",
     url: "http://cp.cloudflare.com/generate_204",
-    proxies: [ "选择节点","特殊","香港", "台湾", "美国", "新加坡", "日本"]
+    proxies: [ "选择节点","特殊","香港", "台湾", "美国", "新加坡", "日本","加拿大","其他"]
   };
 
 
-  const restrictedRegionForCN =[
-    "Japan"
-  ]
+
   //轮询
   const pollingJanpan = {
+    name: "轮询(日本)",
+    type: "load-balance",
+    url: "http://cp.cloudflare.com/generate_204",
+    lazy: true,
+    proxies: regionProxies["Japan"],
+    strategy: "round-robin"
+  }
+  //轮询
+  const pollingSinggapore = {
+    name: "轮询(新加坡)",
+    type: "load-balance",
+    url: "http://cp.cloudflare.com/generate_204",
+    lazy: true,
+    proxies: regionProxies["Singapore"],
+    strategy: "round-robin"
+  }
+
+  const restrictedRegionForCN =[
+    "Japan", 
+    "Singapore",
+    "United States",
+    "Taiwan"
+  ]
+  const restrictedRegionForCNPolling = {
     name: "轮询(日本)",
     type: "load-balance",
     url: "http://cp.cloudflare.com/generate_204",
@@ -1407,18 +1462,7 @@ function proxyTrasformer(params){
     proxies: restrictedRegionForCN.map(region => regionProxies[region]).flat(),
     strategy: "round-robin"
   }
-  const restrictedRegionForCN =[
-    "Singapore"
-  ]
-  //轮询
-  const pollingSinggapore = {
-    name: "轮询(新加坡)",
-    type: "load-balance",
-    url: "http://cp.cloudflare.com/generate_204",
-    lazy: true,
-    proxies: restrictedRegionForCN.map(region => regionProxies[region]).flat(),
-    strategy: "round-robin"
-  }
+
   const restrictedRegionForCNWithHK =[
     "Hong Kong",
     "United States",
@@ -1459,7 +1503,7 @@ function proxyTrasformer(params){
 
   const groups = [];
   // 插入分组
-  groups.unshift(mode,Low, Proxy, DownLoad,AI, Other, Special,LoadBlance, US, HongKong, Taiwan, Japan, Singapore,  pollingJanpan,pollingSinggapore, restrictedRegionForCNWithHKPolling, Auto);
+  groups.unshift(mode,Low, Proxy, DownLoad,AI, Other, Special,LoadBlance, US, HongKong, Taiwan, Japan, Singapore,Canada,  pollingJanpan,pollingSinggapore, restrictedRegionForCNWithHKPolling, Auto);
   // 插入规则
   params["proxy-groups"] = groups;
   params["rules"] = rules;
