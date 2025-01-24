@@ -80,7 +80,7 @@ function trasformer(params){
 
 
 
-
+//规则
 const rules = [
 
   "PROCESS-NAME,LdTermDaemon.exe,REJECT",
@@ -184,7 +184,7 @@ const rules = [
   "GEOSITE,category-bank-cn,DIRECT",
   "GEOSITE,tencent,DIRECT",
   "GEOSITE,alibaba,DIRECT",
-  // "GEOSITE,netease,DIRECT",
+  "GEOSITE,netease,DIRECT",
   "GEOSITE,bilibili,DIRECT",
   "GEOSITE,github,选择节点",
   "GEOSITE,microsoft@cn,DIRECT",
@@ -199,6 +199,7 @@ const rules = [
   // "GEOSITE,facebook,选择节点",
   "GEOSITE,anaconda,选择节点",
   "GEOSITE,cloudflare,选择节点",
+  "GEOSITE,wise,加拿大",
 
   "GEOSITE,sogou,DIRECT",
   "GEOSITE,qihoo360,DIRECT",
@@ -1218,8 +1219,7 @@ const rules = [
 
 //代理分组
 function proxyTrasformer(params){
-params.proxies = params.proxies.concat([
-]);
+params.proxies = params.proxies.concat([]);
 
 
 //代理名称过滤
